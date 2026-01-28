@@ -1,0 +1,45 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  username varchar
+  hash_password varchar
+  created_at timestamp
+}
+
+Table meeting {
+  id integer [primary key]
+  start datetime
+  duration interger
+  place varchar
+  theme varchar
+  creator intreger
+}
+
+Table invation {
+  id integer [primary key]
+  target integer
+  meeting integer
+  creater_at timestamp
+}
+Table users_meeting {
+  id integer [primary key]
+  member integer
+  meeting integer
+}
+
+Table notifier {
+  id integer [primary key]
+  addressee integer
+  text varchar
+  meeting integer
+  create_at timestamp
+}
+Ref: meeting.creator > users.id
+Ref: invation.target > users.id
+Ref: invation.meeting > meeting.id
+Ref: users.id < users_meeting.member
+Ref: meeting.id < users_meeting.meeting
+Ref: users.id < notifier.addressee
+Ref: meeting.id < notifier.meeting
