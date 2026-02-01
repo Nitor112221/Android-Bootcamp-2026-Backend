@@ -1,0 +1,44 @@
+package ru.sicampus.bootcamp2026.controller;
+
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.sicampus.bootcamp2026.dto.UserDTO;
+import ru.sicampus.bootcamp2026.service.UsersService;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("api/users")
+public class UsersController {
+    private final UsersService usersService;
+
+    @GetMapping
+    public List<UserDTO> getAllUsers() {
+        return usersService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(usersService.getUserById(id));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usersService.createUser(dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
+        return ResponseEntity.ok(usersService.updateUser(id, dto));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        usersService.deletePerson(id);
+        return ResponseEntity.noContent().build();
+    }
+}
