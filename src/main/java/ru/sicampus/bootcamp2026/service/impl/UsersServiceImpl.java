@@ -21,7 +21,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return usersRepository.findAll().stream()
+        return usersRepository.findAll()
+                .stream()
                 .map(UserMapper::convertToDto)
                 .toList();
     }
@@ -69,7 +70,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void deletePerson(Long id) {
+    public void deleteUser(Long id) {
         if(usersRepository.findById(id).isEmpty()) {
             throw new UserNotFoundException("User not exists");
         }
