@@ -3,6 +3,7 @@ package ru.sicampus.bootcamp2026.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +25,12 @@ public class Meeting {
     private String theme;
 
     private String description;
-
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "creator", nullable = false)
     private Users creator;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<UsersMeeting> members;
 }

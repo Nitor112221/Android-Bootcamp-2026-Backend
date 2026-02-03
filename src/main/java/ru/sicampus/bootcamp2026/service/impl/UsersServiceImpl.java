@@ -1,15 +1,21 @@
 package ru.sicampus.bootcamp2026.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
+import ru.sicampus.bootcamp2026.dto.UserRegisterDTO;
+import ru.sicampus.bootcamp2026.entity.Authority;
 import ru.sicampus.bootcamp2026.entity.Users;
 import ru.sicampus.bootcamp2026.exceptions.EmailAlreadyUsedException;
+import ru.sicampus.bootcamp2026.exceptions.PasswordNotMatchException;
 import ru.sicampus.bootcamp2026.exceptions.UserNotFoundException;
+import ru.sicampus.bootcamp2026.repository.AuthorityRepository;
 import ru.sicampus.bootcamp2026.repository.UsersRepository;
 import ru.sicampus.bootcamp2026.service.UsersService;
 import ru.sicampus.bootcamp2026.util.UserMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
-
+    private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -34,20 +41,25 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserDTO createUser(UserDTO dto) {
+    public UserDTO createUser(UserRegisterDTO dto) {
         Optional<Users> optionalUser = usersRepository.findByEmail(dto.getEmail());
         if (optionalUser.isPresent()) {
             throw new EmailAlreadyUsedException("User with this email already exists");
         }
+        if (!dto.getPassword().equals(dto.getPasswordAgain())) {
+            throw new PasswordNotMatchException("Passwords not matched");
+        }
+        Authority roleUser = authorityRepository.findByAuthority("ROLE_USER").orElseThrow(() -> new RuntimeException("Role User not exist"));
 
         Users user = new Users();
-        user.setId(dto.getId());
         user.setFirstName(dto.getFirstName());
         user.setSecondName(dto.getSecondName());
         user.setPatronymic(dto.getPatronymic());
         user.setEmail(dto.getEmail());
         user.setPosition(dto.getPosition());
-        user.setCreatedAt(dto.getCreatedAt());
+        user.setHashPassword(passwordEncoder.encode(dto.getPassword()));
+        user.getAuthorities().add(roleUser);
+        user.setCreatedAt(LocalDateTime.now());
         return UserMapper.convertToDto(usersRepository.save(user));
     }
 
@@ -65,7 +77,6 @@ public class UsersServiceImpl implements UsersService {
         user.setPatronymic(dto.getPatronymic());
         user.setEmail(dto.getEmail());
         user.setPosition(dto.getPosition());
-        user.setCreatedAt(dto.getCreatedAt());
         return UserMapper.convertToDto(usersRepository.save(user));
     }
 
@@ -76,5 +87,12 @@ public class UsersServiceImpl implements UsersService {
         }
 
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDTO getPersonByEmail(String email) {
+        return UserMapper.convertToDto(usersRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("Not user with this email")
+        ));
     }
 }

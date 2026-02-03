@@ -4,10 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.sicampus.bootcamp2026.exceptions.AlreadyExistMeetingAtThisTimeException;
-import ru.sicampus.bootcamp2026.exceptions.EmailAlreadyUsedException;
-import ru.sicampus.bootcamp2026.exceptions.MeetingNotExist;
-import ru.sicampus.bootcamp2026.exceptions.UserNotFoundException;
+import ru.sicampus.bootcamp2026.exceptions.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,5 +26,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistMeetingAtThisTimeException.class)
     public ResponseEntity<String> handleAlreadyExistMeetingAtThisTimeException(AlreadyExistMeetingAtThisTimeException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public ResponseEntity<String> handlePasswordNotMatchException(PasswordNotMatchException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }
