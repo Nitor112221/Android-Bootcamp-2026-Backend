@@ -13,16 +13,16 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="first_name" type="VARCHAR(20)">
+            <column name="first_name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="second_name" type="VARCHAR(20)">
+            <column name="second_name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="patronymic" type="VARCHAR(20)">
+            <column name="patronymic" type="VARCHAR(50)">
                 <constraints nullable="true"/>
             </column>
-            <column name="position" type="VARCHAR(20)">
+            <column name="position" type="VARCHAR(100)">
                 <constraints nullable="true"/>
             </column>
             <column name="email" type="VARCHAR(320)">

@@ -1,5 +1,7 @@
 package ru.sicampus.bootcamp2026.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.sicampus.bootcamp2026.dto.MeetingDTO;
 import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
@@ -19,4 +21,7 @@ public interface MeetingService {
 
     List<UserDTO> getAllMemberOfMeeting(Long id);
 
+    Page<MeetingDTO> getAllMeetingPaginated(Pageable pageable);
+
+    Pageable buildPage(int page, int size);
 }

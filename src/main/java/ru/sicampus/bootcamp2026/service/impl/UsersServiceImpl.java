@@ -1,6 +1,9 @@
 package ru.sicampus.bootcamp2026.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
@@ -94,5 +97,15 @@ public class UsersServiceImpl implements UsersService {
         return UserMapper.convertToDto(usersRepository.findByEmail(email).orElseThrow(
                 () -> new UserNotFoundException("Not user with this email")
         ));
+    }
+
+    @Override
+    public Page<UserDTO> getAllUsersPaginated(Pageable pageable) {
+        return usersRepository.findAll(pageable).map(UserMapper::convertToDto);
+    }
+
+    @Override
+    public Pageable buildPage(int page, int size) {
+        return PageRequest.of(page, size);
     }
 }
