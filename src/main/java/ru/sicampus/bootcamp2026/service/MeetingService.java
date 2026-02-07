@@ -7,6 +7,7 @@ import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
 import ru.sicampus.bootcamp2026.dto.MemberDTO;
 import ru.sicampus.bootcamp2026.entity.Users;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MeetingService {
@@ -25,4 +26,6 @@ public interface MeetingService {
     Page<MeetingDTO> getAllMeetingPaginated(Pageable pageable);
 
     Pageable buildPage(int page, int size);
+
+    List<MeetingDTO> getAllMeetingAfterNow(Users user);
 }

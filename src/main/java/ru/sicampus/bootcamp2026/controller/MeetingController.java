@@ -59,4 +59,9 @@ public class MeetingController {
     public ResponseEntity<List<MemberDTO>> getAllMembersOfMeeting(@PathVariable Long id) {
         return ResponseEntity.ok(meetingService.getAllMemberOfMeeting(id));
     }
+
+    @GetMapping("/schedule")
+    public ResponseEntity<List<MeetingDTO>> getAllMeetingAfterNod(@AuthenticationPrincipal Users user) {
+        return ResponseEntity.ok(meetingService.getAllMeetingAfterNow(user));
+    }
 }

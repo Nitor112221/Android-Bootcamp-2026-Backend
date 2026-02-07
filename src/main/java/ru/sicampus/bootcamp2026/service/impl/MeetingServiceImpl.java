@@ -114,4 +114,9 @@ public class MeetingServiceImpl implements MeetingService {
     public Pageable buildPage(int page, int size) {
         return PageRequest.of(page, size);
     }
+
+    @Override
+    public List<MeetingDTO> getAllMeetingAfterNow(Users user) {
+        return meetingRepository.findAllAfterNow(user.getId()).stream().map(MeetingMapper::convertToDto).toList();
+    }
 }
