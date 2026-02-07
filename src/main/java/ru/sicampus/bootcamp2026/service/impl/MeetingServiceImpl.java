@@ -13,11 +13,9 @@ import ru.sicampus.bootcamp2026.entity.Users;
 import ru.sicampus.bootcamp2026.entity.UsersMeeting;
 import ru.sicampus.bootcamp2026.entity.UsersMeetingStatus;
 import ru.sicampus.bootcamp2026.exceptions.AlreadyExistMeetingAtThisTimeException;
-import ru.sicampus.bootcamp2026.exceptions.MeetingNotExist;
-import ru.sicampus.bootcamp2026.exceptions.UserNotFoundException;
+import ru.sicampus.bootcamp2026.exceptions.MeetingNotExistException;
 import ru.sicampus.bootcamp2026.repository.MeetingRepository;
 import ru.sicampus.bootcamp2026.repository.UsersMeetingRepository;
-import ru.sicampus.bootcamp2026.repository.UsersRepository;
 import ru.sicampus.bootcamp2026.service.MeetingService;
 import ru.sicampus.bootcamp2026.util.MeetingMapper;
 import ru.sicampus.bootcamp2026.util.UserMapper;
@@ -41,7 +39,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDTO getMeetingById(Long id) {
-        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExist("Meeting with like this id don't exist"));
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExistException("Meeting with like this id don't exist"));
         return MeetingMapper.convertToDto(meeting);
     }
 
@@ -78,7 +76,7 @@ public class MeetingServiceImpl implements MeetingService {
             throw new AlreadyExistMeetingAtThisTimeException("New meeting overlaps with another meeting");
         }
 
-        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExist("Meeting not exist"));
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExistException("Meeting not exist"));
         meeting.setDuration(dto.getDuration());
         meeting.setStart(dto.getStart());
         meeting.setPlace(dto.getPlace());
@@ -90,12 +88,12 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public void deleteMeeting(Long id) {
-        meetingRepository.delete(meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExist("Meeting with like this id don't exist")));
+        meetingRepository.delete(meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExistException("Meeting with like this id don't exist")));
     }
 
     @Override
     public List<UserDTO> getAllMemberOfMeeting(Long id) {
-        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExist("Meeting with like this id don't exist"));
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExistException("Meeting with like this id don't exist"));
         return meeting.getMembers()
                 .stream()
                 .map((UM) -> UserMapper.convertToDto(UM.getMember()))

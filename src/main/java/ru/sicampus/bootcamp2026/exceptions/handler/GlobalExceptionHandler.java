@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(MeetingNotExist.class)
-    public ResponseEntity<String> handleMeetingNotExist(MeetingNotExist exception) {
+    @ExceptionHandler(MeetingNotExistException.class)
+    public ResponseEntity<String> handleMeetingNotExist(MeetingNotExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
@@ -33,18 +33,33 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(InvitationHasAlreadyResponded.class)
-    public ResponseEntity<String> handleInvitationHasAlreadyResponded(InvitationHasAlreadyResponded exception) {
+    @ExceptionHandler(InvitationHasAlreadyRespondedException.class)
+    public ResponseEntity<String> handleInvitationHasAlreadyResponded(InvitationHasAlreadyRespondedException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(InvitationNotExist.class)
-    public ResponseEntity<String> handleInvitationNotExist(InvitationNotExist exception) {
+    @ExceptionHandler(InvitationNotExistException.class)
+    public ResponseEntity<String> handleInvitationNotExist(InvitationNotExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvitationNotSentToYou.class)
-    public ResponseEntity<String> handleInvitationNotSentToYou(InvitationNotSentToYou exception) {
+    @ExceptionHandler(InvitationNotSentToYouException.class)
+    public ResponseEntity<String> handleInvitationNotSentToYou(InvitationNotSentToYouException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotEnoughRightException.class)
+    public ResponseEntity<String> handleNotEnoughRightException(NotEnoughRightException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UserAlreadyInMeetingException.class)
+    public ResponseEntity<String> handleUserAlreadyInMeetingException(UserAlreadyInMeetingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvitationAlreadyExistsException.class)
+    public ResponseEntity<String> handleInvitationAlreadyExistsException(InvitationAlreadyExistsException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 }
