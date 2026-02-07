@@ -2,8 +2,6 @@ package ru.sicampus.bootcamp2026.dto;
 
 import lombok.Data;
 import ru.sicampus.bootcamp2026.entity.InvitationStatus;
-import ru.sicampus.bootcamp2026.entity.Meeting;
-import ru.sicampus.bootcamp2026.entity.Users;
 
 import java.time.LocalDateTime;
 

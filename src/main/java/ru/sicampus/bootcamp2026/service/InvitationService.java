@@ -1,7 +1,6 @@
 package ru.sicampus.bootcamp2026.service;
 
 import ru.sicampus.bootcamp2026.dto.InvitationDTO;
-import ru.sicampus.bootcamp2026.entity.Meeting;
 import ru.sicampus.bootcamp2026.entity.Users;
 
 import java.util.List;
