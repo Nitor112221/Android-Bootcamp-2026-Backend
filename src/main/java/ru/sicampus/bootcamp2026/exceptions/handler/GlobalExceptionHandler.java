@@ -32,4 +32,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlePasswordNotMatchException(PasswordNotMatchException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(InvitationHasAlreadyResponded.class)
+    public ResponseEntity<String> handleInvitationHasAlreadyResponded(InvitationHasAlreadyResponded exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvitationNotExist.class)
+    public ResponseEntity<String> handleInvitationNotExist(InvitationNotExist exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvitationNotSentToYou.class)
+    public ResponseEntity<String> handleInvitationNotSentToYou(InvitationNotSentToYou exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
 }
