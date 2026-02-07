@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.sicampus.bootcamp2026.dto.MeetingDTO;
 import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
+import ru.sicampus.bootcamp2026.entity.Users;
 import ru.sicampus.bootcamp2026.service.MeetingService;
 
 import java.util.List;
@@ -29,14 +31,14 @@ public class MeetingController {
         return ResponseEntity.ok(meetingService.getMeetingById(id));
     }
 
-    @PostMapping("/book/{userId}") // TODO: костыль, пока не появится авторизация
-    public ResponseEntity<MeetingDTO> createMeeting(@PathVariable("userId") Long userId, @RequestBody MeetingInputDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(meetingService.createMeeting(userId, dto));
+    @PostMapping("/book")
+    public ResponseEntity<MeetingDTO> createMeeting(Authentication authentication, @RequestBody MeetingInputDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(meetingService.createMeeting((Users) authentication.getPrincipal(), dto));
     }
 
-    @PutMapping("/{id}/{userId}") // TODO: костыль, пока не появится авторизация
-    public ResponseEntity<MeetingDTO> updateMeeting(@PathVariable("id") Long id, @PathVariable("userId") Long userId, @RequestBody MeetingInputDTO dto) {
-        return ResponseEntity.ok(meetingService.updateMeeting(id, userId, dto));
+    @PutMapping("/{id}")
+    public ResponseEntity<MeetingDTO> updateMeeting(@PathVariable("id") Long id, Authentication authentication, @RequestBody MeetingInputDTO dto) {
+        return ResponseEntity.ok(meetingService.updateMeeting(id, (Users) authentication.getPrincipal(), dto));
     }
 
     @DeleteMapping("{id}")

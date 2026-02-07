@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import ru.sicampus.bootcamp2026.dto.MeetingDTO;
 import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
+import ru.sicampus.bootcamp2026.entity.Users;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface MeetingService {
 
     MeetingDTO getMeetingById(Long id);
 
-    MeetingDTO createMeeting(Long userId, MeetingInputDTO dto);
+    MeetingDTO createMeeting(Users user, MeetingInputDTO dto);
 
-    MeetingDTO updateMeeting(Long id, Long userId, MeetingInputDTO dto);
+    MeetingDTO updateMeeting(Long id, Users user, MeetingInputDTO dto);
 
     void deleteMeeting(Long id);
 

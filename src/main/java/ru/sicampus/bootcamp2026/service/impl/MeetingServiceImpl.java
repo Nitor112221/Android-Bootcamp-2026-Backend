@@ -43,12 +43,11 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDTO createMeeting(Long userId, MeetingInputDTO dto) {
+    public MeetingDTO createMeeting(Users user, MeetingInputDTO dto) {
         // TODO: добавлять связь запись в UsersMeeting
-        Users user = usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not exist"));
         LocalDateTime start = dto.getStart();
         LocalDateTime end = dto.getStart().plusMinutes(dto.getDuration());
-        List<Long> overlappingMeeting = meetingRepository.findOverlappingMeetingIds(start, end, userId);
+        List<Long> overlappingMeeting = meetingRepository.findOverlappingMeetingIds(start, end, user.getId());
         if (!overlappingMeeting.isEmpty()) {
             throw new AlreadyExistMeetingAtThisTimeException("New meeting overlaps with another meeting");
         }
@@ -63,9 +62,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDTO updateMeeting(Long id, Long userId, MeetingInputDTO dto) {
-        Users user = usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not exist"));
-        List<Long> overlappingMeeting = meetingRepository.findOverlappingMeetingIds(dto.getStart(), dto.getStart().plusMinutes(dto.getDuration()), userId);
+    public MeetingDTO updateMeeting(Long id, Users user, MeetingInputDTO dto) {
+        List<Long> overlappingMeeting = meetingRepository.findOverlappingMeetingIds(dto.getStart(), dto.getStart().plusMinutes(dto.getDuration()), user.getId());
         if (!overlappingMeeting.isEmpty() && (overlappingMeeting.size() > 1 || !overlappingMeeting.get(0).equals(id))) {
             throw new AlreadyExistMeetingAtThisTimeException("New meeting overlaps with another meeting");
         }
