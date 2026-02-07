@@ -9,6 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.sicampus.bootcamp2026.dto.MeetingDTO;
 import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
+import ru.sicampus.bootcamp2026.dto.MemberDTO;
+import ru.sicampus.bootcamp2026.dto.UserDTO;
 import ru.sicampus.bootcamp2026.entity.Users;
 import ru.sicampus.bootcamp2026.service.MeetingService;
 
@@ -48,10 +50,15 @@ public class MeetingController {
     }
 
     @GetMapping("/paginated")
-    public ResponseEntity<Page<MeetingDTO>> getAllUsersPaginated(
+    public ResponseEntity<Page<MeetingDTO>> getAllMeetingPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(meetingService.getAllMeetingPaginated(meetingService.buildPage(page, size)));
+    }
+
+    @GetMapping("/{id}/members")
+    public ResponseEntity<List<MemberDTO>> getAllMembersOfMeeting(@PathVariable Long id) {
+        return ResponseEntity.ok(meetingService.getAllMemberOfMeeting(id));
     }
 }

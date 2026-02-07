@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.sicampus.bootcamp2026.dto.MeetingDTO;
 import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
+import ru.sicampus.bootcamp2026.dto.MemberDTO;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
 import ru.sicampus.bootcamp2026.entity.Meeting;
 import ru.sicampus.bootcamp2026.entity.Users;
@@ -18,6 +19,7 @@ import ru.sicampus.bootcamp2026.repository.MeetingRepository;
 import ru.sicampus.bootcamp2026.repository.UsersMeetingRepository;
 import ru.sicampus.bootcamp2026.service.MeetingService;
 import ru.sicampus.bootcamp2026.util.MeetingMapper;
+import ru.sicampus.bootcamp2026.util.MemberMapper;
 import ru.sicampus.bootcamp2026.util.UserMapper;
 
 import java.time.LocalDateTime;
@@ -92,11 +94,14 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<UserDTO> getAllMemberOfMeeting(Long id) {
+    public List<MemberDTO> getAllMemberOfMeeting(Long id) {
         Meeting meeting = meetingRepository.findById(id).orElseThrow(() -> new MeetingNotExistException("Meeting with like this id don't exist"));
         return meeting.getMembers()
                 .stream()
-                .map((UM) -> UserMapper.convertToDto(UM.getMember()))
+                .map((UM) -> MemberMapper.convertToDto(
+                        UserMapper.convertToDto(UM.getMember()),
+                        UM.getStatus()
+                ))
                 .toList();
     }
 
