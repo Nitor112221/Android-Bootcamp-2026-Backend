@@ -1,0 +1,7 @@
+package ru.sicampus.bootcamp2026.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.sicampus.bootcamp2026.entity.UsersMeeting;
+
+public interface UsersMeetingRepository extends JpaRepository<UsersMeeting, Long> {
+}

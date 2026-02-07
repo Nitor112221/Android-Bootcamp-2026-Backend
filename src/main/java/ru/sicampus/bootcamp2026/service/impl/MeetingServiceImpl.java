@@ -10,10 +10,13 @@ import ru.sicampus.bootcamp2026.dto.MeetingInputDTO;
 import ru.sicampus.bootcamp2026.dto.UserDTO;
 import ru.sicampus.bootcamp2026.entity.Meeting;
 import ru.sicampus.bootcamp2026.entity.Users;
+import ru.sicampus.bootcamp2026.entity.UsersMeeting;
+import ru.sicampus.bootcamp2026.entity.UsersMeetingStatus;
 import ru.sicampus.bootcamp2026.exceptions.AlreadyExistMeetingAtThisTimeException;
 import ru.sicampus.bootcamp2026.exceptions.MeetingNotExist;
 import ru.sicampus.bootcamp2026.exceptions.UserNotFoundException;
 import ru.sicampus.bootcamp2026.repository.MeetingRepository;
+import ru.sicampus.bootcamp2026.repository.UsersMeetingRepository;
 import ru.sicampus.bootcamp2026.repository.UsersRepository;
 import ru.sicampus.bootcamp2026.service.MeetingService;
 import ru.sicampus.bootcamp2026.util.MeetingMapper;
@@ -26,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
     private final MeetingRepository meetingRepository;
-    private final UsersRepository usersRepository;
+    private final UsersMeetingRepository usersMeetingRepository;
 
     @Override
     public List<MeetingDTO> getAllMeeting() {
@@ -44,13 +47,13 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDTO createMeeting(Users user, MeetingInputDTO dto) {
-        // TODO: добавлять связь запись в UsersMeeting
         LocalDateTime start = dto.getStart();
         LocalDateTime end = dto.getStart().plusMinutes(dto.getDuration());
         List<Long> overlappingMeeting = meetingRepository.findOverlappingMeetingIds(start, end, user.getId());
         if (!overlappingMeeting.isEmpty()) {
             throw new AlreadyExistMeetingAtThisTimeException("New meeting overlaps with another meeting");
         }
+
         Meeting meeting = new Meeting();
         meeting.setDuration(dto.getDuration());
         meeting.setStart(dto.getStart());
@@ -58,7 +61,14 @@ public class MeetingServiceImpl implements MeetingService {
         meeting.setTheme(dto.getTheme());
         meeting.setDescription(dto.getDescription());
         meeting.setCreator(user);
-        return MeetingMapper.convertToDto(meetingRepository.save(meeting));
+        MeetingDTO response = MeetingMapper.convertToDto(meetingRepository.save(meeting));
+
+        UsersMeeting relation = new UsersMeeting();
+        relation.setMeeting(meeting);
+        relation.setMember(user);
+        relation.setStatus(UsersMeetingStatus.CREATOR);
+        usersMeetingRepository.save(relation);
+        return response;
     }
 
     @Override
