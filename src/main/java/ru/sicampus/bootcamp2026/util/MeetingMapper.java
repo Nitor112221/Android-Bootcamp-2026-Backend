@@ -13,7 +13,7 @@ public class MeetingMapper {
         meetingDTO.setPlace(meeting.getPlace());
         meetingDTO.setDuration(meeting.getDuration());
         meetingDTO.setStart(meeting.getStart());
-        meetingDTO.setTheme(meetingDTO.getTheme());
+        meetingDTO.setTheme(meeting.getTheme());
         meetingDTO.setCreator(UserMapper.convertToDto(meeting.getCreator()));
 
         return meetingDTO;
